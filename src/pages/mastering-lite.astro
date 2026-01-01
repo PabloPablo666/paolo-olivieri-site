@@ -1,0 +1,37 @@
+---
+import Base from "../layouts/Base.astro";
+
+const demo = "https://pitchlab-mk2-export.vercel.app/";
+---
+<Base
+  title="Mastering Lite Suite · WIP"
+  description="Suite leggera di mastering: essenziale, veloce, e senza fumo."
+>
+  <h1>Mastering Lite Suite</h1>
+
+  <p class="muted">
+    Una suite di mastering “lite”: pochi strumenti, mirati, con una UI semplice.
+    È in lavorazione.
+  </p>
+
+  <div style="margin:16px 0">
+    <a class="btn" href={demo} target="_blank" rel="noopener noreferrer">Apri demo (Vercel)</a>
+  </div>
+
+  <h2>Obiettivo</h2>
+  <div class="card">
+    <p>
+      Workflow rapido per pre-master / check finali: meter, gain staging, limiting leggero,
+      e controlli che non ti fanno perdere mezz’ora nei menu.
+    </p>
+  </div>
+
+  <h2>Stato</h2>
+  <div class="card">
+    <ul>
+      <li>WIP: architettura e UI</li>
+      <li>Demo pubblica su Vercel</li>
+      <li>Roadmap: moduli + preset + export</li>
+    </ul>
+  </div>
+</Base>

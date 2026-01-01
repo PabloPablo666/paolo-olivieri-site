@@ -1,0 +1,57 @@
+---
+import "../styles/global.css";
+import Nav from "../components/Nav.astro";
+
+const {
+  title = "Paolo Olivieri",
+  description = "Tool builder. Audio. Browser stuff."
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="it" data-matrix="on" data-audio="off">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#0b0b0c" />
+  </head>
+
+  <body>
+    <!-- Matrix overlay -->
+    <canvas id="matrix" aria-hidden="true"></canvas>
+    <script type="module" src="/matrix.js"></script>
+
+    <!-- Toggles -->
+    <div class="toggle-stack">
+      <button id="matrixToggle" class="matrix-toggle" type="button" aria-pressed="true">
+        MATRIX: ON
+      </button>
+      <button id="soundToggle" class="sound-toggle" type="button" aria-pressed="false">
+        SOUND: OFF
+      </button>
+    </div>
+
+    <!-- Audio/glitch/SoundCloud -->
+    <script type="module" src="/audio.js"></script>
+
+    <div class="container">
+      <header style="margin-bottom:14px">
+        <div class="site-name">paolo_olivieri</div>
+        <div class="small muted">tools · audio · browser</div>
+        <Nav />
+      </header>
+
+      <div class="hr"></div>
+
+      <main>
+        <slot />
+      </main>
+
+      <footer class="small muted">
+        © {new Date().getFullYear()} · <a href="/privacy">Privacy</a>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,33 @@
+---
+import Base from "../layouts/Base.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+
+const pitchlabStore =
+  "https://chromewebstore.google.com/detail/%E2%97%86-pitchlab-mk2-%E2%80%94-virtual/achkpjadifhgadgojjiinmcebegneajd";
+
+const masteringDemo = "https://pitchlab-mk2-export.vercel.app/";
+---
+<Base title="Projects · Paolo Olivieri" description="Tool e progetti sviluppati.">
+  <h1>Projects</h1>
+  <p class="muted">Pochi progetti. Se crescono troppo, li potiamo.</p>
+
+  <div style="display:grid; gap:14px;">
+    <ProjectCard
+      title="PitchLab MK2"
+      desc="Virtual Deck Engine in-browser. Pitch e speed linkati, zero key lock."
+      links={[
+        { label: "Pagina progetto", href: "/pitchlab-mk2" },
+        { label: "Chrome Web Store", href: pitchlabStore, external: true }
+      ]}
+    />
+
+    <ProjectCard
+      title="Mastering Lite Suite (WIP)"
+      desc="Suite leggera per mastering: tool essenziali, UI semplice, niente cattedrali. Work in progress."
+      links={[
+        { label: "Pagina progetto", href: "/mastering-lite" },
+        { label: "Demo (Vercel)", href: masteringDemo, external: true }
+      ]}
+    />
+  </div>
+</Base>

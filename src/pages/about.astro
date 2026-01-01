@@ -1,0 +1,82 @@
+---
+import Base from "../layouts/Base.astro";
+
+const soundcloud =
+  "https://soundcloud.com/paolo-olivieri-888893279";
+---
+<Base
+  title="About · Paolo Olivieri"
+  description="Audio, DJing e sviluppo di tool pratici."
+>
+  <h1>About</h1>
+
+  <div class="card">
+    <p>
+      Mi occupo di audio e sviluppo di tool pratici.
+      Arrivo dal DJing e dal lavoro diretto con il suono, non dal marketing
+      né dal “product design” astratto.
+    </p>
+
+    <p>
+      I progetti che sviluppo nascono da esigenze reali:
+      preview affidabile, comportamento fisico coerente,
+      workflow rapidi e prevedibili.
+    </p>
+
+    <p class="muted">
+      Se un tool fa troppe cose, probabilmente ne fa poche bene.
+      Preferisco strumenti semplici, leggibili e difficili da rompere.
+    </p>
+  </div>
+
+  <h2>Background</h2>
+  <div class="card">
+    <ul>
+      <li>DJ e crate digger</li>
+      <li>Esperienza pratica con audio, pitch, tempo e dinamica</li>
+      <li>Sviluppo di estensioni browser e tool audio-focused</li>
+    </ul>
+  </div>
+
+  <h2>Audio</h2>
+  <div class="card">
+    <p>
+      Pubblico mix e materiale audio su SoundCloud.
+      È parte integrante del mio lavoro: testare idee, orecchio e strumenti
+      nel mondo reale.
+    </p>
+
+    <p>
+      <a
+        href={soundcloud}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        SoundCloud · DJ mixes & audio
+      </a>
+    </p>
+  </div>
+
+  <h2>Progetti</h2>
+  <div class="card">
+    <p>
+      I progetti principali sono elencati nella sezione <a href="/projects">Projects</a>.
+      Al momento:
+    </p>
+    <ul>
+      <li><strong>PitchLab MK2</strong> — Virtual Deck Engine in-browser</li>
+      <li><strong>Mastering Lite Suite</strong> — suite di mastering essenziale (WIP)</li>
+    </ul>
+  </div>
+
+  <h2>Contatti</h2>
+  <div class="card">
+    <p>
+      Per questioni tecniche, feedback o collaborazioni sensate:
+    </p>
+    <p>
+      <a href="mailto:paolo@example.com">paolo@example.com</a>
+      <span class="muted small">(sostituisci con la mail reale)</span>
+    </p>
+  </div>
+</Base>

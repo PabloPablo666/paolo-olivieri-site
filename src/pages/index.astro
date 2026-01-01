@@ -1,0 +1,110 @@
+---
+import Base from "../layouts/Base.astro";
+
+const pitchlabStore =
+  "https://chromewebstore.google.com/detail/%E2%97%86-pitchlab-mk2-%E2%80%94-virtual/achkpjadifhgadgojjiinmcebegneajd";
+
+const masteringDemo =
+  "https://pitchlab-mk2-export.vercel.app/";
+
+const soundcloud =
+  "https://soundcloud.com/paolo-olivieri-888893279";
+---
+<Base
+  title="Paolo Olivieri · Tools"
+  description="Tool builder per DJ e audio nerd. Estensioni browser, audio tools e mastering lite."
+>
+  <h1 class="hacker-title">
+  <span data-text="paolo_olivieri">paolo_olivieri</span>
+</h1>
+
+
+  <p class="muted">
+    Tool builder per DJ e audio nerd. Estensioni browser, audio tools
+    e un amore malsano per la semplicità.
+  </p>
+
+  <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap;">
+    <a class="btn" href="/projects">Projects</a>
+    <a class="btn" href="/pitchlab-mk2">PitchLab MK2</a>
+    <a class="btn" href="/mastering-lite">Mastering Lite</a>
+  </div>
+
+  <h2>Projects</h2>
+
+  <div style="display:grid; gap:14px;">
+    <div class="card">
+      <h2 style="margin-top:0">PitchLab MK2</h2>
+      <p class="muted">
+        Virtual Deck Engine in-browser. Pitch e speed sempre linkati,
+        nessun key lock.
+      </p>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+        <a class="btn small" href="/pitchlab-mk2">Pagina progetto</a>
+        <a
+          class="btn small"
+          href={pitchlabStore}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Chrome Web Store
+        </a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 style="margin-top:0">Mastering Lite Suite <span class="muted">(WIP)</span></h2>
+      <p class="muted">
+        Suite di mastering “lite”: strumenti essenziali, UI semplice,
+        niente cattedrali.
+      </p>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+        <a class="btn small" href="/mastering-lite">Pagina progetto</a>
+        <a
+          class="btn small"
+          href={masteringDemo}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Demo (Vercel)
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <h2>Now</h2>
+  <div class="card">
+    <p>
+      Mantengo <strong>PitchLab MK2</strong> e sto costruendo una
+      <strong>Mastering Lite Suite</strong>.
+    </p>
+    <p class="muted small">
+      Obiettivo: tool rapidi, pochi controlli, risultati prevedibili.
+      Se qualcosa non è essenziale, viene tagliato.
+    </p>
+  </div>
+
+  <h2>Links</h2>
+  <div class="card">
+    <ul>
+      <li>
+        <a href={pitchlabStore} target="_blank" rel="noopener noreferrer">
+          PitchLab MK2 · Chrome Web Store
+        </a>
+      </li>
+      <li>
+        <a href={masteringDemo} target="_blank" rel="noopener noreferrer">
+          Mastering Lite · Demo (Vercel)
+        </a>
+      </li>
+      <li>
+        <a href={soundcloud} target="_blank" rel="noopener noreferrer">
+          SoundCloud · DJ mixes & audio
+        </a>
+      </li>
+      <li>
+        <a href="/privacy">Privacy</a>
+      </li>
+    </ul>
+  </div>
+</Base>

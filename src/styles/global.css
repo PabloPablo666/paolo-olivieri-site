@@ -1,0 +1,326 @@
+/* =========================
+   INTER (local) - keep it fast, keep it yours
+   Files must be in: /public/fonts/
+   ========================= */
+@font-face{
+  font-family: "Inter";
+  src: url("/fonts/Inter-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face{
+  font-family: "Inter";
+  src: url("/fonts/Inter-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face{
+  font-family: "Inter";
+  src: url("/fonts/Inter-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root{
+  color-scheme: dark;
+
+  --bg:#0b0b0c;
+  --panel:#101114;
+  --text:#e8e8ea;
+  --muted:#9aa0a6;
+  --accent:#7cf7c2;
+
+  --max: 860px;
+  --radius: 14px;
+  --border: 1px solid rgba(255,255,255,.10);
+}
+
+*{ box-sizing:border-box }
+html,body{ margin:0; padding:0 }
+
+body{
+  font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  line-height: 1.55;          /* più compatto */
+  letter-spacing: -0.01em;   /* più “engineer” */
+  font-size: 15.5px;         /* leggermente più denso */
+}
+
+a{ color: var(--accent); text-decoration: none }
+a:hover{ text-decoration: underline }
+
+p{ margin: .75rem 0 }
+ul{ margin: 0; padding-left: 18px }
+li{ margin: 6px 0 }
+p, li{ max-width: 70ch }
+
+.container{
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.card{
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,0.035),
+    rgba(255,255,255,0.01)
+  );
+  border: var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  backdrop-filter: blur(2px);
+}
+
+.hr{
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255,255,255,.15),
+    transparent
+  );
+  margin: 24px 0;
+}
+
+.small{ font-size:.95rem }
+.muted{ color: var(--muted) }
+
+.btn{
+  display:inline-block;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: var(--border);
+  background: rgba(255,255,255,.04);
+  transition: background .15s ease, transform .05s ease;
+  font-weight: 500; /* Inter Medium feel */
+}
+.btn:hover{
+  background: rgba(255,255,255,.08);
+  text-decoration:none;
+}
+.btn:active{
+  transform: translateY(1px);
+}
+
+h1,h2,h3{
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+h1{
+  font-size: 2rem;
+  letter-spacing: -0.01em;
+}
+h2{
+  font-size: 1.35rem;
+  letter-spacing: -0.01em;
+  margin-top: 32px;
+}
+h3{
+  font-size: 1.1rem;
+  margin-top: 18px;
+}
+
+footer{
+  margin-top: 30px;
+  padding-top: 18px;
+  border-top: var(--border);
+}
+
+/* Matrix canvas overlay */
+#matrix{
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.45;
+  filter: blur(0.15px);
+}
+
+/* Nerd name (header) */
+.site-name{
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 1.1rem;
+  letter-spacing: 0.02em;
+}
+
+/* Toggle button */
+.matrix-toggle{
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 2;
+  border: var(--border);
+  background: rgba(0,0,0,.35);
+  color: var(--text);
+  border-radius: 12px;
+  padding: 8px 10px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  cursor: pointer;
+}
+.matrix-toggle:hover{
+  background: rgba(0,0,0,.55);
+}
+
+/* =========================
+   HOME HACKER TITLE (REAL GLITCH)
+   - prompt style
+   - blinking caret
+   - RGB split + sliced glitch on hover
+   ========================= */
+
+.hacker-title{
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Monaco,
+    Consolas,
+    "JetBrains Mono",
+    "Fira Code",
+    monospace;
+
+  font-weight: 450;
+  letter-spacing: 0.03em;
+  display: inline-block;
+  position: relative;
+  padding-right: 10px;
+  text-shadow: 0 0 18px rgba(124,247,194,0.18);
+}
+
+/* prompt prefix */
+.hacker-title::before{
+  content: "paolo_olivieri@tools:~$ ";
+  color: rgba(232,232,234,0.75);
+  letter-spacing: 0.02em;
+}
+
+/* blinking caret */
+.hacker-title::after{
+  content: "_";
+  margin-left: 6px;
+  color: var(--accent);
+  animation: caret-blink 1s steps(1) infinite;
+  position: relative;
+  top: -1px;
+}
+
+@keyframes caret-blink{
+  50%{ opacity: 0; }
+}
+
+/* The actual word gets duplicated for glitch.
+   We use data-text on the element in HTML. */
+.hacker-title > span{
+  position: relative;
+  display: inline-block;
+}
+
+/* clones */
+.hacker-title > span::before,
+.hacker-title > span::after{
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* red channel */
+.hacker-title > span::before{
+  transform: translate(-1px,0);
+  text-shadow: -2px 0 rgba(255,0,90,0.75);
+}
+
+/* cyan channel */
+.hacker-title > span::after{
+  transform: translate(1px,0);
+  text-shadow: 2px 0 rgba(0,255,255,0.65);
+}
+
+/* hover: real glitch */
+.hacker-title:hover > span::before{
+  opacity: 1;
+  animation: glitch-slice-1 520ms steps(2,end) 1;
+}
+.hacker-title:hover > span::after{
+  opacity: 1;
+  animation: glitch-slice-2 520ms steps(2,end) 1;
+}
+.hacker-title:hover{
+  animation: glitch-jitter 180ms steps(2,end) 2;
+}
+
+@keyframes glitch-jitter{
+  0%   { transform: translate(0,0); }
+  25%  { transform: translate(1px,-1px); }
+  50%  { transform: translate(-1px,1px); }
+  75%  { transform: translate(1px,0); }
+  100% { transform: translate(0,0); }
+}
+
+/* sliced clips */
+@keyframes glitch-slice-1{
+  0%   { clip-path: inset(0 0 0 0); transform: translate(-1px,0); }
+  10%  { clip-path: inset(10% 0 70% 0); transform: translate(-3px,-1px); }
+  20%  { clip-path: inset(65% 0 20% 0); transform: translate(2px,1px); }
+  30%  { clip-path: inset(35% 0 40% 0); transform: translate(-2px,0); }
+  40%  { clip-path: inset(80% 0 5% 0); transform: translate(3px,0); }
+  50%  { clip-path: inset(15% 0 60% 0); transform: translate(-3px,1px); }
+  60%  { clip-path: inset(55% 0 25% 0); transform: translate(2px,-1px); }
+  70%  { clip-path: inset(5% 0 85% 0); transform: translate(-1px,0); }
+  80%  { clip-path: inset(75% 0 10% 0); transform: translate(3px,-1px); }
+  90%  { clip-path: inset(25% 0 55% 0); transform: translate(-2px,1px); }
+  100% { clip-path: inset(0 0 0 0); transform: translate(-1px,0); opacity: 0; }
+}
+
+@keyframes glitch-slice-2{
+  0%   { clip-path: inset(0 0 0 0); transform: translate(1px,0); }
+  12%  { clip-path: inset(60% 0 25% 0); transform: translate(3px,1px); }
+  24%  { clip-path: inset(20% 0 60% 0); transform: translate(-2px,-1px); }
+  36%  { clip-path: inset(75% 0 10% 0); transform: translate(2px,0); }
+  48%  { clip-path: inset(35% 0 40% 0); transform: translate(-3px,1px); }
+  60%  { clip-path: inset(10% 0 70% 0); transform: translate(3px,-1px); }
+  72%  { clip-path: inset(85% 0 5% 0); transform: translate(-2px,0); }
+  84%  { clip-path: inset(45% 0 35% 0); transform: translate(2px,1px); }
+  100% { clip-path: inset(0 0 0 0); transform: translate(1px,0); opacity: 0; }
+}
+/* Toggles stack: SOUND sotto MATRIX */
+.toggle-stack{
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Bottoni toggle: stile comune */
+.matrix-toggle,
+.sound-toggle{
+  border: var(--border);
+  background: rgba(0,0,0,.35);
+  color: var(--text);
+  border-radius: 12px;
+  padding: 8px 10px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  cursor: pointer;
+  position: static; /* IMPORTANTISSIMO: niente fixed qui */
+}
+
+.matrix-toggle:hover,
+.sound-toggle:hover{
+  background: rgba(0,0,0,.55);
+}

@@ -1,0 +1,38 @@
+---
+import Base from "../layouts/Base.astro";
+
+const chromeStore =
+  "https://chromewebstore.google.com/detail/%E2%97%86-pitchlab-mk2-%E2%80%94-virtual/achkpjadifhgadgojjiinmcebegneajd";
+---
+<Base
+  title="PitchLab MK2 · Virtual Deck Engine"
+  description="Virtual turntable in browser. Pitch reale, no key lock."
+>
+  <h1>PitchLab MK2</h1>
+
+  <p class="muted">
+    Virtual turntable in browser. Cambi pitch → cambia speed → cambia tonalità.
+    Esattamente come su vinile.
+  </p>
+
+  <div style="margin:16px 0">
+    <a class="btn" href={chromeStore} target="_blank">Chrome Web Store</a>
+  </div>
+
+  <h2>Perché</h2>
+  <div class="card">
+    <p>
+      Pensato per crate digging, preview e selezione tracce
+      senza alterare il comportamento fisico del pitch.
+    </p>
+  </div>
+
+  <h2>Scelte tecniche</h2>
+  <div class="card">
+    <ul>
+      <li>Nessun key lock / time-stretch</li>
+      <li>Pitch continuo</li>
+      <li>UI minimale</li>
+    </ul>
+  </div>
+</Base>
