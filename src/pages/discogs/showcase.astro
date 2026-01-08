@@ -2,7 +2,10 @@
 import Base from "../../layouts/Base.astro";
 ---
 
-<Base title="Discogs Lakehouse · Showcase" description="Guided demo queries on a multi-table Discogs Parquet pack (DuckDB WASM).">
+<Base
+  title="Discogs Lakehouse · Showcase"
+  description="Guided demo queries on a multi-table Discogs Parquet pack (DuckDB WASM)."
+>
   <body data-discogs-mode="showcase">
     <h1>Discogs Lakehouse · Showcase</h1>
     <p class="muted">
@@ -12,39 +15,37 @@ import Base from "../../layouts/Base.astro";
     <div class="card" style="margin-bottom:16px;">
       <div id="status" class="muted">Ready.</div>
 
-      <div style="display:flex; gap:12px; margin-top:12px; flex-wrap:wrap;">
-        <button class="btn" id="btnLoad" type="button">Load dataset</button>
-        <button class="btn" id="btnRun" type="button">Run current SQL</button>
-        <button class="btn" id="toggleEditor" type="button"></button>
-      </div>
+      <!-- CONTENITORE LASCIATO, BOTTONI RIMOSSI -->
+      <div style="margin-top:12px;"></div>
 
       <div class="hr"></div>
 
-      <div class="muted small" style="margin-bottom:10px;">Featured queries (click to run)</div>
-      <div id="featuredQueries" style="display:flex; gap:12px; flex-wrap:wrap;"></div>
+      <div class="muted small" style="margin-bottom:10px;">
+        Featured queries (click to run)
+      </div>
+      <div
+        id="featuredQueries"
+        style="display:flex; gap:12px; flex-wrap:wrap;"
+      ></div>
     </div>
 
-    <div style="display:grid; grid-template-columns: 360px 1fr; gap:16px; align-items:start;">
-      <aside class="card">
-        <div class="muted small" style="margin-bottom:8px;">All presets</div>
-        <input id="querySearch" placeholder="Search presets…" style="width:100%; margin-bottom:10px;" />
-        <div id="queryPack"></div>
-        <div class="muted small" style="margin-top:10px;">
-          Hotkeys: <code>Alt+1..9</code> run preset · <code>Cmd/Ctrl+K</code> palette · <code>Cmd/Ctrl+Enter</code> run
-        </div>
-      </aside>
-
+    <div
+      style="display:grid; grid-template-columns: 1fr; gap:16px; align-items:start;"
+    >
       <main class="card">
         <div id="editorWrap">
           <textarea
             id="sql"
             rows="10"
             style="width:100%; font-family: ui-monospace, Menlo, Monaco, Consolas, monospace;"
-          >SELECT 'Load dataset' AS next_step;</textarea>
+          >SELECT 'Click a featured query above' AS hint;</textarea>
           <div class="hr"></div>
         </div>
 
-        <pre id="out" style="white-space:pre-wrap; margin:0; font-family: ui-monospace, Menlo, Monaco, Consolas, monospace;">Waiting…</pre>
+        <pre
+          id="out"
+          style="white-space:pre-wrap; margin:0; font-family: ui-monospace, Menlo, Monaco, Consolas, monospace;"
+        >Waiting…</pre>
       </main>
     </div>
 
