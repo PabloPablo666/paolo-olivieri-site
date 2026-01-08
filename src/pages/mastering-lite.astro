@@ -1,37 +1,92 @@
 ---
 import Base from "../layouts/Base.astro";
 
-const demo = "https://pitchlab-mk2-export.vercel.app/";
+const demo =
+  "https://audio-bench.vercel.app/";
 ---
 <Base
-  title="Mastering Lite Suite · WIP"
-  description="Suite leggera di mastering: essenziale, veloce, e senza fumo."
+  title="Audio Bench · Paolo Olivieri"
+  description="Browser-based critical listening and pre-master audio evaluation workspace."
 >
-  <h1>Mastering Lite Suite</h1>
-
+  <h1>Audio Bench</h1>
   <p class="muted">
-    Una suite di mastering “lite”: pochi strumenti, mirati, con una UI semplice.
-    È in lavorazione.
+    Critical listening & pre-master evaluation workspace
   </p>
 
-  <div style="margin:16px 0">
-    <a class="btn" href={demo} target="_blank" rel="noopener noreferrer">Apri demo (Vercel)</a>
-  </div>
-
-  <h2>Obiettivo</h2>
   <div class="card">
     <p>
-      Workflow rapido per pre-master / check finali: meter, gain staging, limiting leggero,
-      e controlli che non ti fanno perdere mezz’ora nei menu.
+      Audio Bench is a focused listening and analysis environment designed
+      to evaluate audio material <strong>before</strong> final mastering
+      or release.
+    </p>
+
+    <p>
+      It runs entirely in the browser and requires no installation,
+making it immediately accessible on desktop and mobile devices.
+Audio processing runs locally, and audio files are never uploaded to a server.
+    </p>
+
+    <p class="muted">
+      The purpose is not to enhance or fix the sound, but to provide
+      a fast and reliable reference to understand what is actually
+      happening in the signal before any irreversible processing.
     </p>
   </div>
 
-  <h2>Stato</h2>
+  <h2>What it is built for</h2>
   <div class="card">
     <ul>
-      <li>WIP: architettura e UI</li>
-      <li>Demo pubblica su Vercel</li>
-      <li>Roadmap: moduli + preset + export</li>
+      <li>Critical listening and technical verification</li>
+      <li>Pre-master and gain staging evaluation</li>
+      <li>Stereo, mono, mid and side monitoring</li>
+      <li>Dynamic range and loudness inspection</li>
+      <li>Vinyl-aware preview and low-end compatibility checks</li>
+      <li>Quick reference checks without installing dedicated software</li>
     </ul>
+  </div>
+
+  <h2>Design principles</h2>
+  <div class="card">
+    <ul>
+      <li>No automatic correction or “smart” processing</li>
+      <li>No creative enhancement or sound shaping</li>
+      <li>Brickwall limiting with predictable, transparent behavior</li>
+      <li>Clear and readable metering (RMS, LUFS, True Peak)</li>
+      <li>Offline export matching the realtime monitoring engine</li>
+      <li>Consistent behavior across desktop and mobile browsers</li>
+    </ul>
+  </div>
+
+  <h2>Objective</h2>
+  <div class="card">
+    <p>
+      Provide a reliable and immediately accessible technical reference
+      to evaluate audio material before final mastering, without altering
+      it in ways that cannot be undone.
+    </p>
+
+    <p class="muted">
+      In short: listen clearly, anywhere, before committing.
+    </p>
+  </div>
+
+  <h2>Status</h2>
+  <div class="card">
+    <p>
+      <strong>Work in progress</strong> — the core audio engine is stable
+      and functional. Interface refinement, workflow improvements and
+      additional monitoring tools are under active development.
+    </p>
+  </div>
+
+  <div style="margin-top:18px">
+    <a
+      class="btn"
+      href={demo}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Open live demo
+    </a>
   </div>
 </Base>

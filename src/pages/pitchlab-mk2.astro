@@ -6,33 +6,175 @@ const chromeStore =
 ---
 <Base
   title="PitchLab MK2 · Virtual Deck Engine"
-  description="Virtual turntable in browser. Pitch reale, no key lock."
+  description="Browser-based reference deck for DJs and diggers: coherent playback behaviour, live BPM analysis, filters and proper metering."
 >
-  <h1>PitchLab MK2</h1>
+  <h1>PitchLab MK2 — Virtual Deck Engine</h1>
 
   <p class="muted">
-    Virtual turntable in browser. Cambi pitch → cambia speed → cambia tonalità.
-    Esattamente come su vinile.
+    A browser-based reference deck for DJs and crate diggers.
+    It’s built for listening and verification while previewing music online.
   </p>
 
-  <div style="margin:16px 0">
-    <a class="btn" href={chromeStore} target="_blank">Chrome Web Store</a>
-  </div>
-
-  <h2>Perché</h2>
   <div class="card">
     <p>
-      Pensato per crate digging, preview e selezione tracce
-      senza alterare il comportamento fisico del pitch.
+      No time-stretching. No key lock.
+      The deck behaves like a playback system, not like a DAW.
+    </p>
+    <p class="muted">
+      Designed for decisions, not performance.
+    </p>
+
+    <div style="margin-top:14px">
+      <a
+        class="btn"
+        href={chromeStore}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Chrome Web Store
+      </a>
+    </div>
+  </div>
+
+  <h2>What it is</h2>
+  <div class="card">
+    <p>
+      PitchLab MK2 is an analysis + preview tool for selectors who want
+      consistent playback behaviour when checking music on platforms like
+      YouTube, Bandcamp and embedded previews.
+    </p>
+
+    <p class="muted">
+      It is not a DJ app, not a DAW, and not a beatgrid tool.
+      It’s a reference environment: change rate and you hear the real-world consequences.
     </p>
   </div>
 
-  <h2>Scelte tecniche</h2>
+  <h2>Playback engine</h2>
+  <div class="card">
+    <p>
+      The engine changes playback rate directly and avoids “helpful” correction layers.
+      The goal is predictable behaviour, not convenience.
+    </p>
+
+    <ul>
+      <li>Direct rate control via <code>HTMLMediaElement.playbackRate</code></li>
+      <li>Browser pitch-preserve flags explicitly disabled</li>
+      <li>No phase vocoder / time-stretch layer</li>
+    </ul>
+  </div>
+
+  <h2>Live BPM analysis</h2>
+  <div class="card">
+    <p>
+      PitchLab MK2 includes real-time BPM estimation derived from the signal
+      (envelope extraction + autocorrelation). It does not rely on page metadata.
+    </p>
+
+    <ul>
+      <li>Real-time BPM estimation from the audio stream (when accessible)</li>
+      <li>Confidence-scored output</li>
+      <li>Half-time / double-time correction</li>
+      <li>Stabilisation logic to reduce jitter</li>
+    </ul>
+
+    <div class="hr" style="margin:16px 0;"></div>
+
+    <p><strong>Manual BPM tools</strong></p>
+    <ul>
+      <li>Manual base BPM input</li>
+      <li>Tap BPM with snapping and hysteresis</li>
+      <li>Reset logic when playback context changes</li>
+    </ul>
+  </div>
+
+  <h2>Mixer & filters</h2>
+  <div class="card">
+    <p>
+      PitchLab MK2 builds a local Web Audio graph on top of the page media.
+      Nothing is uploaded, nothing leaves the browser.
+    </p>
+
+    <ul>
+      <li>Pre-analysis gain stage</li>
+      <li>High-pass filter</li>
+      <li>Low-pass filter</li>
+      <li>Stereo-safe routing</li>
+    </ul>
+
+    <div class="hr" style="margin:16px 0;"></div>
+
+    <p><strong>Typical uses</strong></p>
+    <ul>
+      <li>Isolate rhythmic content for BPM verification</li>
+      <li>Reduce vocals / noise while analysing</li>
+      <li>Quick tonal balance checks during preview</li>
+    </ul>
+  </div>
+
+  <h2>Metering</h2>
+  <div class="card">
+    <p>
+      Proper metering matters when you’re making decisions quickly.
+      PitchLab MK2 provides stereo level measurement with realistic behaviour.
+    </p>
+
+    <ul>
+      <li>Dual-channel (L/R) analysis</li>
+      <li>Peak dBFS + RMS-derived VU</li>
+      <li>Hardware-inspired ballistics (attack / release)</li>
+    </ul>
+
+    <p class="muted">
+      Measurement, not decoration.
+    </p>
+  </div>
+
+  <h2>Embed aware</h2>
+  <div class="card">
+    <p>
+      The extension is built to deal with modern web playback:
+      multiple frames, embedded players and inconsistent page structure.
+    </p>
+
+    <ul>
+      <li>Works across iframes and embedded players</li>
+      <li>Syncs state between frames when needed</li>
+      <li>Targets the correct media element automatically</li>
+    </ul>
+  </div>
+
+  <h2>Design principles</h2>
   <div class="card">
     <ul>
-      <li>Nessun key lock / time-stretch</li>
-      <li>Pitch continuo</li>
-      <li>UI minimale</li>
+      <li>No hidden correction</li>
+      <li>No “DJ-friendly” compromises</li>
+      <li>Predictable response across the entire range</li>
+      <li>Built to behave like a deck, not like software</li>
     </ul>
+  </div>
+
+  <h2>What it is not</h2>
+  <div class="card">
+    <ul>
+      <li>❌ Time-stretching engine</li>
+      <li>❌ Key-lock tool</li>
+      <li>❌ Beat-gridding system</li>
+      <li>❌ DJ performance app</li>
+    </ul>
+
+    <p class="muted">
+      Those already exist. This exists for people who want a clean reference.
+    </p>
+  </div>
+
+  <h2>Chrome Web Store blurb</h2>
+  <div class="card">
+    <p class="muted">
+      PitchLab MK2 is a browser-based reference deck for DJs and crate diggers.
+      It provides coherent playback behaviour, real-time BPM analysis, filtering and proper metering
+      while previewing music on platforms like YouTube and Bandcamp.
+      No time-stretching. No key lock.
+    </p>
   </div>
 </Base>

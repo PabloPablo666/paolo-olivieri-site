@@ -324,3 +324,24 @@ footer{
 .sound-toggle:hover{
   background: rgba(0,0,0,.55);
 }
+
+.nav a{
+  position: relative;
+  padding-left: 14px; /* spazio per la freccetta */
+}
+
+.nav a::before{
+  content: ">";
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  transform: translateX(-2px);
+  transition: opacity .12s ease, transform .12s ease;
+  color: var(--accent);
+}
+
+.nav a:hover::before{
+  opacity: 1;
+  transform: translateX(0);
+}

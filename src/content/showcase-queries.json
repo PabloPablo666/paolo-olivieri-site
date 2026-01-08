@@ -1,0 +1,20 @@
+[
+  {
+    "id": "02_release_fact_rollup_preview",
+    "title": "Release fact rollup (preview)",
+    "description": "Quick preview of the curated release fact dataset.",
+    "sql": "SELECT * FROM release_fact_rollup LIMIT 50;"
+  },
+  {
+    "id": "03_release_fact_rollup_counts",
+    "title": "Release fact rollup + counts",
+    "description": "Adds n_artists and n_labels metrics (BI-friendly).",
+    "sql": "WITH base_releases AS (\n  SELECT release_id, title, country, released\n  FROM release_fact_rollup\n  WHERE country IS NOT NULL\n  ORDER BY release_id\n  LIMIT 20000\n), artist_roll AS (\n  SELECT\n    release_id,\n    COUNT(DISTINCT artist_id) AS n_artists,\n    ARRAY_AGG(DISTINCT artist_name) AS artists\n  FROM (\n    SELECT\n      release_id,\n      UNNEST(string_split(artists_csv, '||')) AS artist_name,\n      NULL::BIGINT AS artist_id\n    FROM base_releases br\n    JOIN release_fact_rollup rf USING (release_id)\n    WHERE rf.artists_csv IS NOT NULL\n  ) t\n  GROUP BY 1\n), label_roll AS (\n  SELECT\n    release_id,\n    COUNT(DISTINCT label_name) AS n_labels,\n    ARRAY_AGG(DISTINCT label_name) AS labels\n  FROM (\n    SELECT\n      release_id,\n      UNNEST(string_split(labels_csv, '||')) AS label_name\n    FROM base_releases br\n    JOIN release_fact_rollup rf USING (release_id)\n    WHERE rf.labels_csv IS NOT NULL\n  ) t\n  GROUP BY 1\n)\nSELECT\n  br.release_id,\n  br.title,\n  br.country,\n  br.released,\n  ar.n_artists,\n  lr.n_labels,\n  ar.artists,\n  lr.labels\nFROM base_releases br\nLEFT JOIN artist_roll ar USING (release_id)\nLEFT JOIN label_roll  lr USING (release_id)\nORDER BY br.release_id\nLIMIT 200;"
+  },
+  {
+    "id": "05_release_fact_metrics",
+    "title": "Release fact metrics (no arrays)",
+    "description": "Metrics-only output: compact and suitable for BI/fact tables.",
+    "sql": "SELECT\n  country,\n  COUNT(*) AS n_releases,\n  AVG(n_artists) AS avg_artists_per_release,\n  AVG(n_labels)  AS avg_labels_per_release\nFROM release_fact_rollup\nWHERE country IS NOT NULL\nGROUP BY 1\nORDER BY n_releases DESC\nLIMIT 50;"
+  }
+]

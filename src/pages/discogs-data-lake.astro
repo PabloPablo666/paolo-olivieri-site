@@ -1,0 +1,126 @@
+---
+import Base from "../layouts/Base.astro";
+
+const repoMeta = "https://github.com/PabloPablo666/discogs-lakehouse";
+const repoInfra = "https://github.com/PabloPablo666/trino-hive-setup";
+const repoPipelines = "https://github.com/PabloPablo666/discogs_tools_refactor";
+---
+
+<Base
+  title="Discogs Lakehouse · Paolo Olivieri"
+  description="Local-first Discogs lakehouse: typed Parquet + Trino + Hive Metastore, with reproducible pipelines and portfolio SQL."
+>
+  <h1>Discogs Lakehouse</h1>
+
+  <p class="muted">
+    Local-first analytical lakehouse built on <strong>Trino</strong>, <strong>Hive Metastore</strong>, and
+    <strong>external typed Parquet</strong>. Designed for reproducible analytics on Discogs dumps.
+  </p>
+
+  <div style="display:flex; gap:12px; flex-wrap:wrap; margin: 16px 0 24px;">
+    <a class="btn" href="/discogs/showcase">Showcase queries</a>
+    <a class="btn" href="/discogs/explore">Explore (SQL)</a>
+    <a class="btn" href={repoMeta} target="_blank" rel="noopener noreferrer">Meta repo</a>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">What this project is</h3>
+    <ul>
+      <li>End-to-end local lakehouse architecture (no cloud dependency)</li>
+      <li>Typed-first storage layout (<code>*_v1_typed</code>) in Parquet</li>
+      <li>SQL-first analytics via Trino (external tables + views)</li>
+      <li>Derived tables for join-heavy workloads and entity resolution</li>
+    </ul>
+  </div>
+
+  <h2>Architecture</h2>
+  <div class="card">
+    <ul>
+      <li><strong>Storage</strong>: external Parquet (outside containers)</li>
+      <li><strong>Metadata</strong>: Hive Metastore backed by Postgres</li>
+      <li><strong>Compute</strong>: Trino (stateless)</li>
+      <li><strong>Pipelines</strong>: Python streaming parsers → typed datasets + derived tables</li>
+    </ul>
+    <p class="muted" style="margin-top:10px;">
+      Compute and metastore can be rebuilt without touching the data lake.
+    </p>
+  </div>
+
+  <h2>Data model</h2>
+  <div class="card">
+    <p>
+      The lake is organized around Discogs entities and relationships:
+      artists, releases, labels, masters, collection snapshots, plus derived “warehouse” tables.
+    </p>
+
+    <ul>
+      <li><code>artists_v1</code> (view) → <code>artists_v1_typed</code> (physical)</li>
+      <li><code>masters_v1</code> (view) → <code>masters_v1_typed</code> (physical)</li>
+      <li><code>artist_aliases_v1</code>, <code>artist_memberships_v1</code> (views over typed)</li>
+      <li><code>warehouse_discogs/*</code> derived datasets (name mapping, xrefs)</li>
+    </ul>
+  </div>
+
+  <h2>Derived datasets</h2>
+  <div class="card">
+    <ul>
+      <li><code>artist_name_map_v1</code>: normalized name → artist_id (resolution bridge)</li>
+      <li><code>release_artists_v1</code>: release → artist_norm (join bridge)</li>
+      <li><code>release_label_xref_v1</code>: release → label mapping for analytics</li>
+    </ul>
+  </div>
+
+  <h2>Reproducibility</h2>
+  <div class="card">
+    <ul>
+      <li>Idempotent bootstrap SQL registers external tables and views</li>
+      <li>Storage is external and persistent; Docker containers are disposable</li>
+      <li>Sanity checks quantify upstream inconsistencies (no silent drift)</li>
+    </ul>
+  </div>
+
+  <h2>Repositories</h2>
+  <div class="card">
+    <ul>
+      <li>
+        <a href={repoMeta} target="_blank
+::contentReference[oaicite:0]{index=0}
+        <a href={repoMeta} target="_blank" rel="noopener noreferrer">
+          Meta repository (project overview + links)
+        </a>
+      </li>
+      <li>
+        <a href={repoInfra} target="_blank" rel="noopener noreferrer">
+          Infrastructure: Trino + Hive Metastore + bootstrap SQL
+        </a>
+      </li>
+      <li>
+        <a href={repoPipelines} target="_blank" rel="noopener noreferrer">
+          Pipelines + tests + SQL query pack (typed datasets)
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <h2>Notes</h2>
+  <div class="card">
+    <p class="muted">
+      Discogs data is subject to Discogs licensing. This project focuses on infrastructure,
+      pipelines and schema design, and does not redistribute proprietary datasets.
+    </p>
+  </div>
+
+  <style>
+    .btn{
+      display:inline-block;
+      padding:10px 14px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,0.25);
+      text-decoration:none;
+      color:inherit;
+      background: rgba(0,0,0,0.25);
+      backdrop-filter: blur(6px);
+    }
+    .btn:hover{ border-color: rgba(255,255,255,0.45); }
+  </style>
+</Base>
