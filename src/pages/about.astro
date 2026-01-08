@@ -4,22 +4,22 @@ import Base from "../layouts/Base.astro";
 const soundcloud =
   "https://soundcloud.com/paolo-olivieri-888893279";
 ---
+
 <Base
   title="About · Paolo Olivieri"
-  description="Sound engineer with a degree in Audio Production. Audio-first tools and browser-based experiments."
+  description="Sound engineer with a degree in Audio Production. Audio-first tools and browser-based systems."
 >
   <h1>About</h1>
 
   <div class="card">
     <p>
       I am a <strong>sound engineer</strong> with a degree in <strong>Audio Production</strong>.
-      My work is grounded in audio fundamentals: gain staging, dynamics, tonal balance,
-      stereo image, translation and repeatable workflows.
+      My work is grounded in fundamentals: gain staging, dynamics, tonal balance,
+      stereo image, translation, and repeatable workflows.
     </p>
 
     <p class="muted">
-      I build tools because I want specific behaviours and reliable references,
-      not because I want “features”.
+      I build tools to reduce uncertainty, not to add features.
     </p>
   </div>
 
@@ -27,8 +27,8 @@ const soundcloud =
   <div class="card">
     <ul>
       <li>Critical listening and technical decision-making</li>
-      <li>Dynamics and loudness control (without hiding the costs)</li>
-      <li>Stereo/mono/M-S monitoring and translation checks</li>
+      <li>Dynamics and loudness control (with visible trade-offs)</li>
+      <li>Stereo / mono / M-S monitoring and translation checks</li>
       <li>Predictable signal paths and debuggable behaviour</li>
     </ul>
   </div>
@@ -36,9 +36,9 @@ const soundcloud =
   <h2>Tool building</h2>
   <div class="card">
     <p>
-      My tools originate from practical problems: reliable preview, physically coherent
-      pitch/tempo behaviour, and workspaces that reduce uncertainty before committing
-      to irreversible processing.
+      My tools come from practical problems encountered while working with audio:
+      previewing material reliably, verifying tempo and pitch behaviour,
+      and making decisions before committing to irreversible processing.
     </p>
 
     <p class="muted">
@@ -50,16 +50,13 @@ const soundcloud =
   <h2>Audio</h2>
   <div class="card">
     <p>
-      I publish DJ mixes and audio material on SoundCloud. This is part of the process:
-      testing ideas, ears and tools in real listening contexts, not just in theory.
+      I publish DJ mixes and audio material on SoundCloud.
+      This is part of the process: testing ears, tools, and assumptions
+      in real listening contexts.
     </p>
 
     <p>
-      <a
-        href={soundcloud}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      <a href={soundcloud} target="_blank" rel="noopener noreferrer">
         SoundCloud · DJ mixes & audio
       </a>
     </p>
@@ -71,19 +68,13 @@ const soundcloud =
       Current work is listed in <a href="/projects">Projects</a>. Main items:
     </p>
     <ul>
-      <li><strong>PitchLab MK2</strong> — browser-based virtual deck engine with physically linked pitch and speed</li>
-      <li><strong>Audio Bench</strong> — critical listening & pre-mastering workspace (WIP)</li>
+      <li>
+        <strong>PitchLab MK2</strong> — Chrome extension that turns web audio players
+        into a reference deck with physically coherent pitch and speed
+      </li>
+      <li>
+        <strong>Audio Bench</strong> — critical listening & pre-mastering workspace (WIP)
+      </li>
     </ul>
-  </div>
-
-  <h2>Contact</h2>
-  <div class="card">
-    <p>
-      Technical questions, feedback, or collaborations that make sense:
-    </p>
-    <p>
-      <a href="mailto:paolo@example.com">paolo@example.com</a>
-      <span class="muted small">(replace with your actual address)</span>
-    </p>
   </div>
 </Base>

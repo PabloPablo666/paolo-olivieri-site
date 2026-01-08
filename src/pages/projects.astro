@@ -8,21 +8,22 @@ const pitchlabStore =
 const audioBenchDemo =
   "https://pitchlab-mk2-export.vercel.app/";
 ---
+
 <Base
   title="Projects · Paolo Olivieri"
-  description="Audio-first tools, browser experiments and critical listening workspaces."
+  description="Audio-first tools, browser extensions and critical listening workspaces."
 >
   <h1>Projects</h1>
 
   <p class="muted">
-    Small set of tools built for real workflows: crate digging, listening, analysis,
-    and predictable audio behaviour. If a project grows into a cathedral, it gets trimmed.
+    Small set of tools built for real workflows: crate digging, listening,
+    analysis and verification. If a project grows into a cathedral, it gets trimmed.
   </p>
 
   <div style="display:grid; gap:14px;">
     <ProjectCard
       title="PitchLab MK2"
-      desc="A browser-based virtual deck engine built for DJ preview and crate digging. Pitch and speed stay physically linked (no key lock / time-stretch). Minimal controls, predictable results, and a workflow that behaves like vinyl rather than a DAW."
+      desc="Chrome extension that turns web audio players into a reference deck for DJs and crate diggers. Pitch and speed remain physically linked (no key lock, no time-stretch), with real-time BPM analysis, filtering and proper metering."
       links={[
         { label: "Project page", href: "/pitchlab-mk2" },
         { label: "Chrome Web Store", href: pitchlabStore, external: true }
@@ -31,20 +32,20 @@ const audioBenchDemo =
 
     <ProjectCard
       title="Audio Bench (WIP)"
-      desc="A critical listening & pre-mastering workspace. Built to verify balance, dynamics, stereo image, loudness and vinyl-safety before final mastering. No magic presets: clear metering, controlled limiting (true peak), monitoring modes (stereo/mono/M/S) and an offline export that matches the realtime engine."
+      desc="Critical listening and pre-mastering workspace. Built to verify balance, dynamics, stereo image and loudness before final mastering. No magic presets: clear metering, controlled limiting and predictable monitoring modes."
       links={[
         { label: "Project page", href: "/mastering-lite" },
         { label: "Live demo (Vercel)", href: audioBenchDemo, external: true }
       ]}
     />
-    <ProjectCard
-  title="Discogs Data Lake"
-  desc="Local data lake built from Discogs data dumps: ingestion, normalization, and queryable datasets for analysis and tooling. Designed for repeatable imports and fast lookup."
-  links={[
-    { label: "Project page", href: "/discogs-data-lake" },
-    { label: "GitHub", href: "https://github.com/PabloPablo666", external: true }
-  ]}
-/>
 
+    <ProjectCard
+      title="Discogs Data Lake"
+      desc="Local data lake built from Discogs dumps: ingestion, normalization and queryable datasets. Designed for repeatable imports, analysis and tooling."
+      links={[
+        { label: "Project page", href: "/discogs-data-lake" },
+        { label: "GitHub", href: "https://github.com/PabloPablo666", external: true }
+      ]}
+    />
   </div>
 </Base>

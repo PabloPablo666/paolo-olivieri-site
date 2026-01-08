@@ -1,261 +1,132 @@
+// public/audio.js
 (() => {
   const KEY = "audio_enabled";
-  const SOUNDCLOUD_URL = "https://soundcloud.com/paolo-olivieri-888893279";
-  const SC_VOLUME = 25;
-  const GLITCH_COOLDOWN = 120;
+
+  // Put the file here: /public/sfx/glitch.mp3
+  const GLITCH_URL = "/sfx/glitch.mp3";
+
+  // Tweaks
+  const GLITCH_GAIN = 0.4;       // 0..1-ish (final gain applied to the sample)
+  const GLITCH_COOLDOWN_MS = 250;
 
   let audioEnabled = false;
   let audioCtx = null;
-  let lastGlitchAt = 0;
 
-  let scIframe = null;
-  let scWidget = null;
-  let scReady = false;
-  let scApiPromise = null;
+  let glitchBuf = null;          // AudioBuffer
+  let glitchLoading = null;      // Promise
+  let lastGlitchAt = 0;
+  let lastSource = null;
 
   const $ = (sel) => document.querySelector(sel);
 
-  function lsGet(k){ try { return localStorage.getItem(k); } catch { return null; } }
-  function lsSet(k,v){ try { localStorage.setItem(k,v); } catch {} }
+  function lsGet(k) { try { return localStorage.getItem(k); } catch { return null; } }
+  function lsSet(k, v) { try { localStorage.setItem(k, v); } catch {} }
 
-  function setHtmlAudio(enabled){
+  function setHtmlAudio(enabled) {
     document.documentElement.dataset.audio = enabled ? "on" : "off";
   }
 
-  function ensureAudioContext(){
+  function ensureAudioContext() {
     if (audioCtx) return audioCtx;
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     return audioCtx;
   }
 
-  async function resumeCtx(){
+  async function resumeCtx() {
     const ctx = ensureAudioContext();
     if (ctx.state === "suspended") {
       try { await ctx.resume(); } catch {}
     }
   }
 
-  function playGlitchSound(){
-  if (!audioEnabled) return;
+  async function loadGlitchBuffer() {
+    if (glitchBuf) return glitchBuf;
+    if (glitchLoading) return glitchLoading;
 
-  const now = performance.now();
-  if (now - lastGlitchAt < GLITCH_COOLDOWN) return;
-  lastGlitchAt = now;
+    glitchLoading = (async () => {
+      const ctx = ensureAudioContext();
+      const res = await fetch(GLITCH_URL, { cache: "force-cache" });
+      if (!res.ok) throw new Error(`Failed to fetch ${GLITCH_URL} (${res.status})`);
+      const arr = await res.arrayBuffer();
+      glitchBuf = await ctx.decodeAudioData(arr.slice(0));
+      return glitchBuf;
+    })();
 
-  const ctx = ensureAudioContext();
-  const t0 = ctx.currentTime;
-
-  // ===== helpers =====
-  const mkDistortionCurve = (amount = 18) => {
-    const n = 44100;
-    const curve = new Float32Array(n);
-    const k = typeof amount === "number" ? amount : 18;
-    for (let i = 0; i < n; i++) {
-      const x = (i * 2) / n - 1;
-      curve[i] = ((3 + k) * x * 20 * Math.PI / 180) / (Math.PI + k * Math.abs(x));
-    }
-    return curve;
-  };
-
-  const dur = 0.48; // ~480ms long
-  const N = Math.floor(ctx.sampleRate * dur);
-
-  // ===== layered noise bed (darker, longer) =====
-  const buffer = ctx.createBuffer(1, N, ctx.sampleRate);
-  const data = buffer.getChannelData(0);
-
-  // darker "electric" noise: slightly correlated, not harsh white noise
-  let last = 0;
-  for (let i = 0; i < N; i++) {
-    const white = (Math.random() * 2 - 1);
-    // simple low-pass correlation
-    last = last * 0.85 + white * 0.15;
-
-    // slow-ish amplitude wobble inside the sound
-    const wob = 0.65 + 0.35 * Math.sin((i / ctx.sampleRate) * (2 * Math.PI * 7.5));
-
-    // envelope: fast in, slow out
-    const x = i / N;
-    const env = x < 0.08 ? (x / 0.08) : Math.pow(1 - x, 1.6);
-
-    data[i] = last * wob * env * 0.9;
+    return glitchLoading;
   }
+  async function playGlitchSample() {
+ if (!audioEnabled) return;
 
-  const noise = ctx.createBufferSource();
-  noise.buffer = buffer;
+ const now = performance.now();
+ if (now - lastGlitchAt < GLITCH_COOLDOWN_MS) return;
+ lastGlitchAt = now;
 
-  // bandpass sweep but LOWER and WIDER (less sharp)
-  const bp = ctx.createBiquadFilter();
-  bp.type = "bandpass";
-  bp.Q.value = 2.2;
-  bp.frequency.setValueAtTime(420, t0);
-  bp.frequency.exponentialRampToValueAtTime(1100, t0 + 0.14);
-  bp.frequency.exponentialRampToValueAtTime(520,  t0 + dur);
+ await resumeCtx();
 
-  // soften top end
-  const lp = ctx.createBiquadFilter();
-  lp.type = "lowpass";
-  lp.frequency.setValueAtTime(2400, t0); // keeps it non-tagliente
-  lp.Q.value = 0.7;
+ let buf;
+ try {
+   buf = await loadGlitchBuffer();
+ } catch (e) {
+   console.warn("[audio] glitch sample load failed:", e);
+   return;
+ }
 
-  // gentle crunch
-  const ws = ctx.createWaveShaper();
-  ws.curve = mkDistortionCurve(22);
-  ws.oversample = "2x";
+ const ctx = ensureAudioContext();
+ const t0 = ctx.currentTime;
 
-  // master envelope
-  const g = ctx.createGain();
-  g.gain.setValueAtTime(0.0001, t0);
-  g.gain.exponentialRampToValueAtTime(0.18, t0 + 0.04);      // slower attack
-  g.gain.setValueAtTime(0.14, t0 + 0.20);                    // hold a bit
-  g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);     // tail
+ // Stop previous if still playing (keeps it tight)
+ try { lastSource?.stop(); } catch {}
 
-  noise.connect(bp);
-  bp.connect(ws);
-  ws.connect(lp);
-  lp.connect(g);
-  g.connect(ctx.destination);
+ const src = ctx.createBufferSource();
+ src.buffer = buf;
 
-  noise.start(t0);
-  noise.stop(t0 + dur);
+ const g = ctx.createGain();
 
-  // ===== warm "electric hum" layer (fills body) =====
-  const humDur = dur;
+ // --- timing ---
+ const MAX_LEN  = 0.68;    // hard limit: 800ms total
+ const FADE_IN  = 0.008;  // 8ms
+ const FADE_OUT = 0.115;  // 15ms
 
-  const osc = ctx.createOscillator();
-  osc.type = "sine";
-  // start higher then settle, like a power surge stabilizing
-  osc.frequency.setValueAtTime(180, t0);
-  osc.frequency.exponentialRampToValueAtTime(78, t0 + 0.22);
+ // Play length can't exceed the buffer
+ const playLen = Math.min(MAX_LEN, buf.duration);
 
-  const og = ctx.createGain();
-  og.gain.setValueAtTime(0.0001, t0);
-  og.gain.exponentialRampToValueAtTime(0.06, t0 + 0.06);
-  og.gain.setValueAtTime(0.05, t0 + 0.25);
-  og.gain.exponentialRampToValueAtTime(0.0001, t0 + humDur);
+ // Make sure fades fit inside playLen
+ const fadeIn = Math.min(FADE_IN, Math.max(0, playLen * 0.25));
+ const fadeOut = Math.min(FADE_OUT, Math.max(0, playLen - fadeIn));
 
-  const olp = ctx.createBiquadFilter();
-  olp.type = "lowpass";
-  olp.frequency.setValueAtTime(900, t0);
+ const tEnd = t0 + playLen;
+ const tFadeOutStart = Math.max(t0 + fadeIn, tEnd - fadeOut);
 
-  osc.connect(olp);
-  olp.connect(og);
-  og.connect(ctx.destination);
+ // envelope
+ g.gain.setValueAtTime(0.0001, t0);
+ g.gain.linearRampToValueAtTime(GLITCH_GAIN, t0 + fadeIn);
 
-  osc.start(t0);
-  osc.stop(t0 + humDur);
+ g.gain.setValueAtTime(GLITCH_GAIN, tFadeOutStart);
+ g.gain.linearRampToValueAtTime(0.0001, tEnd);
 
-  // ===== subtle stereo-ish movement (fake) via tiny tremolo =====
-  // (kept minimal to avoid seasickness)
-  const lfo = ctx.createOscillator();
-  lfo.type = "sine";
-  lfo.frequency.setValueAtTime(6.2, t0);
+ src.connect(g);
+ g.connect(ctx.destination);
 
-  const lfoGain = ctx.createGain();
-  lfoGain.gain.setValueAtTime(0.04, t0); // depth
+ // schedule exact stop at 0.8s (or shorter if file is shorter)
+ src.start(t0);
+ src.stop(tEnd);
 
-  lfo.connect(lfoGain);
-  lfoGain.connect(g.gain);
+ lastSource = src;
 
-  lfo.start(t0);
-  lfo.stop(t0 + dur);
+ src.onended = () => {
+   if (lastSource === src) lastSource = null;
+ };
 }
 
-  function loadSoundCloudApi(){
-    if (scApiPromise) return scApiPromise;
-    scApiPromise = new Promise((resolve, reject) => {
-      if (window.SC && window.SC.Widget) return resolve();
-      const s = document.createElement("script");
-      s.src = "https://w.soundcloud.com/player/api.js";
-      s.async = true;
-      s.onload = () => resolve();
-      s.onerror = () => reject(new Error("SoundCloud API load failed"));
-      document.head.appendChild(s);
-    });
-    return scApiPromise;
-  }
 
-  function createIframe(){
-    if (scIframe) return scIframe;
-
-    scIframe = document.createElement("iframe");
-    scIframe.id = "sc-player";
-    scIframe.allow = "autoplay";
-    scIframe.title = "SoundCloud Player";
-
-    scIframe.src = "https://w.soundcloud.com/player/?" + new URLSearchParams({
-      url: SOUNDCLOUD_URL,
-      auto_play: "false",
-      hide_related: "true",
-      show_comments: "false",
-      show_user: "false",
-      show_reposts: "false",
-      visual: "false"
-    }).toString();
-
-    scIframe.style.position = "fixed";
-    scIframe.style.left = "-9999px";
-    scIframe.style.top = "0";
-    scIframe.style.width = "1px";
-    scIframe.style.height = "1px";
-    scIframe.style.opacity = "0";
-    scIframe.style.pointerEvents = "none";
-
-    document.body.appendChild(scIframe);
-    return scIframe;
-  }
-
-  async function ensureWidget(){
-    if (scWidget && scReady) return scWidget;
-
-    await loadSoundCloudApi();
-    createIframe();
-
-    scWidget = window.SC.Widget(scIframe);
-
-    await new Promise((resolve) => {
-      scWidget.bind(window.SC.Widget.Events.READY, () => {
-        scReady = true;
-        resolve();
-      });
-    });
-
-    try { scWidget.setVolume(SC_VOLUME); } catch {}
-    return scWidget;
-  }
-
-  async function playRandomFromSoundCloud(){
-    try {
-      const w = await ensureWidget();
-
-      w.getSounds((sounds) => {
-        if (Array.isArray(sounds) && sounds.length > 0) {
-          const pick = sounds[Math.floor(Math.random() * sounds.length)];
-          w.load(pick.permalink_url, { auto_play: true, visual: false, show_user: false });
-          w.setVolume(SC_VOLUME);
-        } else {
-          // fallback
-          w.play();
-          w.setVolume(SC_VOLUME);
-        }
-      });
-    } catch (e) {
-      console.warn("[audio] SoundCloud not available:", e);
-    }
-  }
-
-  function pauseSoundCloud(){
-    try { scWidget?.pause(); } catch {}
-  }
-
-  function updateSoundBtn(){
+  function updateSoundBtn() {
     const btn = $("#soundToggle");
     if (!btn) return;
     btn.textContent = audioEnabled ? "SOUND: ON" : "SOUND: OFF";
     btn.setAttribute("aria-pressed", audioEnabled ? "true" : "false");
   }
 
-  function updateMatrixBtn(){
+  function updateMatrixBtn() {
     const btn = $("#matrixToggle");
     if (!btn) return;
     const on = document.documentElement.dataset.matrix === "on";
@@ -263,20 +134,25 @@
     btn.setAttribute("aria-pressed", on ? "true" : "false");
   }
 
-  function setAudioEnabled(enabled){
+  function setAudioEnabled(enabled) {
     audioEnabled = !!enabled;
     lsSet(KEY, audioEnabled ? "1" : "0");
     setHtmlAudio(audioEnabled);
     updateSoundBtn();
 
+    // Preload the sample when user enables audio (optional but feels snappy)
     if (audioEnabled) {
-      resumeCtx().finally(() => playRandomFromSoundCloud());
+      resumeCtx().finally(() => {
+        loadGlitchBuffer().catch(() => {});
+      });
     } else {
-      pauseSoundCloud();
+      // stop any tail
+      try { lastSource?.stop(); } catch {}
+      lastSource = null;
     }
   }
 
-  function bindButtons(){
+  function bindButtons() {
     const soundBtn = $("#soundToggle");
     const matrixBtn = $("#matrixToggle");
 
@@ -297,14 +173,21 @@
     }
   }
 
-  function bindHoverGlitch(){
-    document.querySelectorAll(".hacker-title, .site-name").forEach((el) => {
-      el.addEventListener("pointerenter", () => playGlitchSound(), { passive: true });
-    });
+  function bindHoverGlitch() {
+    // Only HOME hacker title should trigger glitch sound.
+    // Needs: <body data-page="home"> on home page.
+    const isHome = document.body?.getAttribute("data-page") === "home";
+    if (!isHome) return;
+
+    const el = document.querySelector(".hacker-title");
+    if (!el) return;
+
+    el.addEventListener("pointerenter", () => {
+      playGlitchSample().catch(() => {});
+    }, { passive: true });
   }
 
-  function init(){
-    // audio default OFF
+  function init() {
     const saved = lsGet(KEY);
     audioEnabled = saved === "1";
     setHtmlAudio(audioEnabled);
@@ -314,9 +197,15 @@
 
     updateSoundBtn();
     updateMatrixBtn();
+
+    // If audio already enabled, preload the sample quietly
+    if (audioEnabled) {
+      resumeCtx().finally(() => {
+        loadGlitchBuffer().catch(() => {});
+      });
+    }
   }
 
-  // robust init (no race)
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", init, { once: true });
   } else {
