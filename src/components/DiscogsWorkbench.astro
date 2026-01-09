@@ -1,0 +1,12 @@
+---
+type Mode = "explore" | "showcase";
+const { mode } = Astro.props as { mode: Mode };
+---
+
+<div data-discogs-mode={mode}>
+  <slot />
+</div>
+
+<script>
+  import "../scripts/discogs-workbench.client.ts";
+</script>

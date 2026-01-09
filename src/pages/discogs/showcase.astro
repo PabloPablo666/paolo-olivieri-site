@@ -1,10 +1,11 @@
 ---
 import Base from "../../layouts/Base.astro";
+import DiscogsWorkbench from "../../components/DiscogsWorkbench.astro";
 ---
 
 <Base
   title="Discogs Lakehouse · Showcase"
-  description="Guided demo queries on a multi-table Discogs Parquet pack (DuckDB WASM)."
+  description="Guided demo queries on a multi-table Discogs Parquet demo pack (DuckDB WASM)."
 >
   <body data-discogs-mode="showcase">
     <h1>Discogs Lakehouse · Showcase</h1>
@@ -14,7 +15,6 @@ import Base from "../../layouts/Base.astro";
       rollups on a deterministic Discogs Parquet demo pack.
     </p>
 
-    <!-- Implementation note -->
     <div class="card small muted" style="margin-bottom:12px;">
       <strong>Implementation note</strong><br />
       Client-side execution using <strong>DuckDB WASM</strong>.
@@ -22,32 +22,19 @@ import Base from "../../layouts/Base.astro";
       with minimal adaptations for browser execution.
     </div>
 
-    <!-- Featured queries -->
-    <div class="card" style="margin-bottom:12px;">
-      <div
-        id="status"
-        class="muted small"
-        style="margin-bottom:6px;"
-      >
-        Ready. Click a demo to start.
+    <DiscogsWorkbench mode="showcase">
+      <div class="card" style="margin-bottom:12px;">
+        <div id="status" class="muted small" style="margin-bottom:6px;">
+          Ready. Click a demo to start.
+        </div>
+
+        <div class="hr" style="margin:12px 0;"></div>
+
+        <div class="muted small" style="margin-bottom:8px;">Featured queries</div>
+
+        <div id="featuredQueries" style="display:flex; gap:12px; flex-wrap:wrap;"></div>
       </div>
 
-      <div class="hr" style="margin:12px 0;"></div>
-
-      <div class="muted small" style="margin-bottom:8px;">
-        Featured queries
-      </div>
-
-      <div
-        id="featuredQueries"
-        style="display:flex; gap:12px; flex-wrap:wrap;"
-      ></div>
-    </div>
-
-    <!-- Output -->
-    <div
-      style="display:grid; grid-template-columns: 1fr; gap:16px; align-items:start;"
-    >
       <main class="card">
         <div id="editorWrap">
           <textarea
@@ -60,15 +47,8 @@ SELECT 'Click a featured query above' AS hint;
           <div class="hr" style="margin:12px 0;"></div>
         </div>
 
-        <pre
-          id="out"
-          style="white-space:pre-wrap; margin:0; font-family: ui-monospace, Menlo, Monaco, Consolas, monospace;"
-        >
-Waiting…
-        </pre>
+        <pre id="out" style="white-space:pre-wrap; margin:0; font-family: ui-monospace, Menlo, Monaco, Consolas, monospace;">Waiting…</pre>
       </main>
-    </div>
-
-    <script type="module" src="/src/scripts/discogs-workbench.client.ts"></script>
+    </DiscogsWorkbench>
   </body>
 </Base>
