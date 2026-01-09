@@ -7,41 +7,57 @@
     "sample_mod": 10000,
     "sample_threshold": 200
   },
+  "derived_keys": {
+    "demo_release_ids": 10000,
+    "demo_artist_ids": 39207,
+    "demo_label_norms": 5817,
+    "demo_master_ids": 7455
+  },
   "files": {
     "releases_demo": {
       "path": "/Users/paoloolivieri/discogs_data_lake/hive-data/warehouse_discogs/web_demo_pack_v1/releases_demo/data.parquet",
       "rows": 10000,
-      "bytes": 320420
+      "bytes": 361661
     },
-    "release_artists_demo": {
-      "path": "/Users/paoloolivieri/discogs_data_lake/hive-data/warehouse_discogs/web_demo_pack_v1/release_artists_demo/data.parquet",
-      "rows": 11151,
-      "bytes": 170907
-    },
-    "release_label_xref_demo": {
-      "path": "/Users/paoloolivieri/discogs_data_lake/hive-data/warehouse_discogs/web_demo_pack_v1/release_label_xref_demo/data.parquet",
-      "rows": 12199,
-      "bytes": 282274
-    },
-    "artist_name_map_demo": {
-      "path": "/Users/paoloolivieri/discogs_data_lake/hive-data/warehouse_discogs/web_demo_pack_v1/artist_name_map_demo/data.parquet",
-      "rows": 46774,
-      "bytes": 415003
+    "masters_demo": {
+      "path": "/Users/paoloolivieri/discogs_data_lake/hive-data/warehouse_discogs/web_demo_pack_v1/masters_demo/data.parquet",
+      "rows": 7454,
+      "bytes": 386220
     },
     "artists_demo": {
       "path": "/Users/paoloolivieri/discogs_data_lake/hive-data/warehouse_discogs/web_demo_pack_v1/artists_demo/data.parquet",
       "rows": 39207,
-      "bytes": 981369
+      "bytes": 4989625
     },
     "artist_aliases_demo": {
       "path": "/Users/paoloolivieri/discogs_data_lake/hive-data/warehouse_discogs/web_demo_pack_v1/artist_aliases_demo/data.parquet",
       "rows": 275343,
-      "bytes": 3544495
+      "bytes": 3531951
     },
     "artist_memberships_demo": {
       "path": "/Users/paoloolivieri/discogs_data_lake/hive-data/warehouse_discogs/web_demo_pack_v1/artist_memberships_demo/data.parquet",
       "rows": 187306,
-      "bytes": 4317124
+      "bytes": 4583432
+    },
+    "labels_demo": {
+      "path": "/Users/paoloolivieri/discogs_data_lake/hive-data/warehouse_discogs/web_demo_pack_v1/labels_demo/data.parquet",
+      "rows": 5665,
+      "bytes": 1600508
+    },
+    "release_artists_demo": {
+      "path": "/Users/paoloolivieri/discogs_data_lake/hive-data/warehouse_discogs/web_demo_pack_v1/release_artists_demo/data.parquet",
+      "rows": 11151,
+      "bytes": 171067
+    },
+    "release_label_xref_demo": {
+      "path": "/Users/paoloolivieri/discogs_data_lake/hive-data/warehouse_discogs/web_demo_pack_v1/release_label_xref_demo/data.parquet",
+      "rows": 12199,
+      "bytes": 283094
+    },
+    "artist_name_map_demo": {
+      "path": "/Users/paoloolivieri/discogs_data_lake/hive-data/warehouse_discogs/web_demo_pack_v1/artist_name_map_demo/data.parquet",
+      "rows": 46774,
+      "bytes": 416846
     }
   }
 }

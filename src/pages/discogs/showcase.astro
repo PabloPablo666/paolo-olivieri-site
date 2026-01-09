@@ -8,27 +8,43 @@ import Base from "../../layouts/Base.astro";
 >
   <body data-discogs-mode="showcase">
     <h1>Discogs Lakehouse · Showcase</h1>
+
     <p class="muted">
-      Guided queries that demonstrate joins, bridge tables, and warehouse-style rollups on a deterministic Parquet demo pack.
+      Guided queries that demonstrate joins, bridge tables, and warehouse-style
+      rollups on a deterministic Discogs Parquet demo pack.
     </p>
 
-    <div class="card" style="margin-bottom:16px;">
-      <div id="status" class="muted">Ready.</div>
+    <!-- Implementation note -->
+    <div class="card small muted" style="margin-bottom:12px;">
+      <strong>Implementation note</strong><br />
+      Client-side execution using <strong>DuckDB WASM</strong>.
+      Queries and table structure closely mirror the repository version,
+      with minimal adaptations for browser execution.
+    </div>
 
-      <!-- CONTENITORE LASCIATO, BOTTONI RIMOSSI -->
-      <div style="margin-top:12px;"></div>
-
-      <div class="hr"></div>
-
-      <div class="muted small" style="margin-bottom:10px;">
-        Featured queries (click to run)
+    <!-- Featured queries -->
+    <div class="card" style="margin-bottom:12px;">
+      <div
+        id="status"
+        class="muted small"
+        style="margin-bottom:6px;"
+      >
+        Ready. Click a demo to start.
       </div>
+
+      <div class="hr" style="margin:12px 0;"></div>
+
+      <div class="muted small" style="margin-bottom:8px;">
+        Featured queries
+      </div>
+
       <div
         id="featuredQueries"
         style="display:flex; gap:12px; flex-wrap:wrap;"
       ></div>
     </div>
 
+    <!-- Output -->
     <div
       style="display:grid; grid-template-columns: 1fr; gap:16px; align-items:start;"
     >
@@ -36,16 +52,20 @@ import Base from "../../layouts/Base.astro";
         <div id="editorWrap">
           <textarea
             id="sql"
-            rows="10"
+            rows="8"
             style="width:100%; font-family: ui-monospace, Menlo, Monaco, Consolas, monospace;"
-          >SELECT 'Click a featured query above' AS hint;</textarea>
-          <div class="hr"></div>
+          >
+SELECT 'Click a featured query above' AS hint;
+          </textarea>
+          <div class="hr" style="margin:12px 0;"></div>
         </div>
 
         <pre
           id="out"
           style="white-space:pre-wrap; margin:0; font-family: ui-monospace, Menlo, Monaco, Consolas, monospace;"
-        >Waiting…</pre>
+        >
+Waiting…
+        </pre>
       </main>
     </div>
 

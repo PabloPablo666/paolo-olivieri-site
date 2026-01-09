@@ -15,21 +15,21 @@ const soundcloud =
   title="Paolo Olivieri · Sound Engineer & Tools"
   description="Live sound engineer with a degree in Audio Production. Audio tools for analysis and reference listening."
 >
-
   <h1 class="hacker-title">
     <span data-text="paolo_olivieri">paolo_olivieri</span>
   </h1>
 
   <p class="muted">
     Sound engineer with a degree in Audio Production.
-    I currently work in live sound and develop tools for analysis,
-    reference listening and pre-processing verification.
+    I work in live sound and build tools for analysis, reference listening,
+    and pre-processing verification.
   </p>
 
   <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap;">
     <a class="btn" href="/projects">Projects</a>
     <a class="btn" href="/pitchlab-mk2">PitchLab MK2</a>
     <a class="btn" href="/mastering-lite">Audio Bench</a>
+    <a class="btn" href="/discogs">Discogs Lakehouse</a>
   </div>
 
   <h2>Projects</h2>
@@ -61,7 +61,7 @@ const soundcloud =
       </h3>
       <p class="muted">
         Critical listening and pre-mastering workspace.
-        Designed to verify balance, dynamics, stereo image, loudness
+        Built to verify balance, dynamics, stereo image, loudness
         and vinyl compatibility before final mastering.
       </p>
       <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
@@ -76,6 +76,30 @@ const soundcloud =
         </a>
       </div>
     </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">Discogs Lakehouse</h3>
+      <p class="muted">
+        Browser-based data lake built from Discogs dumps.
+        Normalised Parquet datasets + DuckDB WASM queries for fast inspection,
+        joins and repeatable analysis directly in the browser.
+      </p>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+        <a class="btn small" href="/discogs-data-lake">Project page</a>
+        <a
+          class="btn small"
+          href="/discogs/showcase"
+        >
+          Showcase
+        </a>
+        <a
+          class="btn small"
+          href="/discogs/explore"
+        >
+          Explore
+        </a>
+      </div>
+    </div>
   </div>
 
   <h2>Now</h2>
@@ -87,8 +111,10 @@ const soundcloud =
     </p>
 
     <p>
-      Alongside this, I maintain <strong>PitchLab MK2</strong> and actively
-      develop <strong>Audio Bench</strong>.
+      Alongside this, I maintain <strong>PitchLab MK2</strong>,
+      actively develop <strong>Audio Bench</strong>,
+      and iterate on <strong>Discogs Lakehouse</strong> as a data layer
+      for tooling and analysis.
     </p>
 
     <p class="muted small">
@@ -108,6 +134,11 @@ const soundcloud =
       <li>
         <a href={audioBenchDemo} target="_blank" rel="noopener noreferrer">
           Audio Bench · Live demo
+        </a>
+      </li>
+      <li>
+        <a href="/discogs">
+          Discogs Lakehouse · Project page
         </a>
       </li>
       <li>
