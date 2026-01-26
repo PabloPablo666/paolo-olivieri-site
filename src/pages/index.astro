@@ -9,7 +9,16 @@ const audioBenchDemo =
 
 const soundcloud =
   "https://soundcloud.com/paolo-olivieri-888893279";
+
+// New sections (internal pages)
+const esp32Page = "/esp32-offline-chat";
+const gamesPage = "/games";
+
+// Optional external links (leave as null/"" if you don't have them yet)
+const esp32Repo = "";   // e.g. "https://github.com/...."
+const gamesRepo = "";   // e.g. "https://github.com/...."
 ---
+
 <Base
   page="home"
   title="Paolo Olivieri · Sound Engineer & Tools"
@@ -30,6 +39,8 @@ const soundcloud =
     <a class="btn" href="/pitchlab-mk2">PitchLab MK2</a>
     <a class="btn" href="/mastering-lite">Audio Bench</a>
     <a class="btn" href="/discogs-data-lake">Discogs Lakehouse</a>
+    <a class="btn" href={esp32Page}>ESP32</a>
+    <a class="btn" href={gamesPage}>Games</a>
   </div>
 
   <h2>Projects</h2>
@@ -86,18 +97,41 @@ const soundcloud =
       </p>
       <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
         <a class="btn small" href="/discogs-data-lake">Project page</a>
-        <a
-          class="btn small"
-          href="/discogs/showcase"
-        >
-          Showcase
-        </a>
-        <a
-          class="btn small"
-          href="/discogs/explore"
-        >
-          Explore
-        </a>
+        <a class="btn small" href="/discogs/showcase">Showcase</a>
+        <a class="btn small" href="/discogs/explore">Explore</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">ESP32 Offline Chat</h3>
+      <p class="muted">
+        Offline local chat hosted on an ESP32 Access Point.
+        Web UI, nicknames, instant updates, timestamps, alerts (LED/buzzer),
+        and small UX extras (sound, notifications, flashes).
+      </p>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+        <a class="btn small" href={esp32Page}>Project page</a>
+        {esp32Repo ? (
+          <a class="btn small" href={esp32Repo} target="_blank" rel="noopener noreferrer">
+            Repo
+          </a>
+        ) : null}
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">Games</h3>
+      <p class="muted">
+        Small interactive experiments and prototypes.
+        Includes text adventures and narrative systems, built for the web and Unity tooling.
+      </p>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+        <a class="btn small" href={gamesPage}>Games hub</a>
+        {gamesRepo ? (
+          <a class="btn small" href={gamesRepo} target="_blank" rel="noopener noreferrer">
+            Repo
+          </a>
+        ) : null}
       </div>
     </div>
   </div>
@@ -113,8 +147,8 @@ const soundcloud =
     <p>
       Alongside this, I maintain <strong>PitchLab MK2</strong>,
       actively develop <strong>Audio Bench</strong>,
-      and iterate on <strong>Discogs Lakehouse</strong> as a data layer
-      for tooling and analysis.
+      iterate on <strong>Discogs Lakehouse</strong>,
+      and build embedded/web prototypes such as the <strong>ESP32 Offline Chat</strong>.
     </p>
 
     <p class="muted small">
@@ -139,6 +173,16 @@ const soundcloud =
       <li>
         <a href="/discogs-data-lake">
           Discogs Lakehouse · Project page
+        </a>
+      </li>
+      <li>
+        <a href={esp32Page}>
+          ESP32 Offline Chat · Project page
+        </a>
+      </li>
+      <li>
+        <a href={gamesPage}>
+          Games · Hub
         </a>
       </li>
       <li>

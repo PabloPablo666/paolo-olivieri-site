@@ -8,87 +8,73 @@ const repoPipelines = "https://github.com/PabloPablo666/discogs_tools_refactor";
 
 <Base
   title="Discogs Lakehouse · Paolo Olivieri"
-  description="Local-first Discogs lakehouse: typed Parquet + Trino + Hive Metastore, with reproducible pipelines and browser-friendly DuckDB WASM demos."
+  description="Local-first Discogs lakehouse with orchestrated, run-based pipelines and immutable Parquet snapshots."
 >
   <h1>Discogs Lakehouse</h1>
 
   <p class="muted">
-    Local-first analytical lakehouse on <strong>Trino</strong> + <strong>Hive Metastore</strong> over
-    <strong>external typed Parquet</strong>. Built for reproducible Discogs analytics and tooling.
+    A local-first analytical lakehouse for Discogs data, built around
+    <strong>run-based execution</strong>, <strong>orchestrated pipelines</strong>
+    and <strong>immutable Parquet snapshots</strong>.
   </p>
 
   <div style="display:flex; gap:12px; flex-wrap:wrap; margin: 16px 0 22px;">
     <a class="btn" href="/discogs/showcase">Showcase queries</a>
     <a class="btn" href="/discogs/explore">Explore (SQL)</a>
-    <a class="btn" href={repoMeta} target="_blank" rel="noopener noreferrer">GitHub (meta)</a>
+    <a class="btn" href={repoMeta} target="_blank" rel="noopener noreferrer">GitHub</a>
   </div>
 
   <div class="card">
-    <h3 style="margin-top:0">What this is</h3>
+    <h3 style="margin-top:0">What this project is</h3>
     <ul>
-      <li>End-to-end local lakehouse (no cloud dependency)</li>
-      <li>Typed Parquet datasets (<code>*_typed</code>) + versioned reference tables (<code>*_ref_vN</code>)</li>
-      <li>Join-friendly “warehouse” bridges (name resolution, xrefs, canon/dedup)</li>
-      <li>Browser demo: same schema surfaced via DuckDB WASM for this site</li>
+      <li>Fully local lakehouse (no cloud services)</li>
+      <li>Discogs snapshot dumps processed as deterministic pipeline runs</li>
+      <li>Pipeline orchestration with explicit phases and failure handling</li>
+      <li>Typed Parquet datasets designed for safe joins and reproducible analytics</li>
     </ul>
   </div>
 
   <h2>Architecture</h2>
   <div class="card">
     <ul>
-      <li><strong>Storage</strong>: external Parquet (persistent, outside containers)</li>
-      <li><strong>Metadata</strong>: Hive Metastore backed by Postgres</li>
+      <li><strong>Storage</strong>: external immutable Parquet files</li>
+      <li><strong>Metadata</strong>: Hive Metastore (Postgres-backed)</li>
       <li><strong>Compute</strong>: Trino (stateless)</li>
-      <li><strong>Pipelines</strong>: Python parsers → typed datasets → derived/warehouse tables</li>
+      <li><strong>Orchestration</strong>: Digdag workflows governing pipeline execution</li>
     </ul>
+
     <p class="muted small" style="margin-top:10px;">
-      Compute and metastore can be rebuilt without touching the data lake.
+      Pipelines are executed as ordered workflows with explicit dependencies and guarded promotion.
     </p>
   </div>
 
-  <h2>Data model</h2>
+  <h2>Pipeline design</h2>
   <div class="card">
-    <p class="muted" style="margin-top:0;">
-      Core entities + versioned references + derived bridges for joins and analytics.
-    </p>
-
     <ul>
-      <li><strong>Entities (typed + raw/view)</strong>:
-        <code>artists_v1</code> / <code>artists_v1_typed</code>,
-        <code>masters_v1</code> / <code>masters_v1_typed</code>,
-        <code>artist_aliases_v1</code> / <code>artist_aliases_v1_typed</code>,
-        <code>artist_memberships_v1</code> / <code>artist_memberships_v1_typed</code>
-      </li>
-
-      <li><strong>References</strong>:
-        <code>releases_ref_v6</code>,
-        <code>labels_ref_v10</code>
-      </li>
-
-      <li><strong>Bridges / xrefs</strong>:
-        <code>artist_name_map_v1</code>,
-        <code>release_artists_v1</code>,
-        <code>release_label_xref_v1</code>,
-        <code>release_genre_xref_v1</code>,
-        <code>release_style_xref_v1</code>
-      </li>
-
-      <li><strong>Cleaned variants / metrics</strong>:
-        <code>release_label_xref_v1_canon</code>,
-        <code>release_label_xref_v1_dedup</code>,
-        <code>label_release_counts_v1</code>
-      </li>
-
-      <li><strong>Collection</strong>: <code>collection</code> (optional snapshot dataset)</li>
+      <li>Each execution generates a unique, immutable run directory</li>
+      <li>Run identifiers are computed once and propagated to all tasks</li>
+      <li>Ingest, build, test and promotion are isolated pipeline phases</li>
+      <li>Promotion is allowed only after all validations succeed</li>
     </ul>
   </div>
 
-  <h2>Reproducibility</h2>
+  <h2>Data philosophy</h2>
   <div class="card">
     <ul>
-      <li>Idempotent bootstrap SQL registers external tables and views</li>
-      <li>External storage is persistent; containers are disposable</li>
-      <li>Sanity checks quantify drift and upstream inconsistencies</li>
+      <li>Canonical datasets preserve Discogs data faithfully</li>
+      <li>Identifiers are typed wherever possible</li>
+      <li>Ambiguous fields remain textual to avoid false precision</li>
+      <li>Interpretation is applied explicitly at analytical level</li>
+    </ul>
+  </div>
+
+  <h2>Reproducibility & audit</h2>
+  <div class="card">
+    <ul>
+      <li>No dataset is ever overwritten</li>
+      <li>Publishing is atomic via an <code>active</code> pointer switch</li>
+      <li>Failed runs never affect consumers</li>
+      <li>Each run produces permanent validation and sanity reports</li>
     </ul>
   </div>
 
@@ -96,18 +82,18 @@ const repoPipelines = "https://github.com/PabloPablo666/discogs_tools_refactor";
   <div class="card">
     <ul>
       <li>
-        <a href={repoMeta} target="_blank" rel="noopener noreferrer">
-          Meta repository (overview + links)
-        </a>
-      </li>
-      <li>
         <a href={repoInfra} target="_blank" rel="noopener noreferrer">
-          Infrastructure: Trino + Hive Metastore + bootstrap SQL
+          Infrastructure (Trino + Hive Metastore)
         </a>
       </li>
       <li>
         <a href={repoPipelines} target="_blank" rel="noopener noreferrer">
-          Pipelines + tests + SQL (typed datasets + derived tables)
+          Orchestrated pipelines (Digdag)
+        </a>
+      </li>
+      <li>
+        <a href={repoMeta} target="_blank" rel="noopener noreferrer">
+          Meta repository (overview)
         </a>
       </li>
     </ul>
@@ -116,8 +102,8 @@ const repoPipelines = "https://github.com/PabloPablo666/discogs_tools_refactor";
   <h2>Notes</h2>
   <div class="card">
     <p class="muted" style="margin:0;">
-      Discogs data is subject to Discogs licensing. This project focuses on infrastructure,
-      pipelines, schema design and demo queries, and does not redistribute proprietary datasets.
+      Discogs data is subject to Discogs licensing. This project focuses on data engineering
+      architecture, orchestration and reproducibility, and does not redistribute datasets.
     </p>
   </div>
 </Base>
