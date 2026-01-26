@@ -7,9 +7,10 @@ const links = [
   { href: "/pitchlab-mk2", label: "PitchLab MK2" },
   { href: "/mastering-lite", label: "Audio Bench" },
   { href: "/discogs-data-lake", label: "Discogs Lakehouse" },
+  { href: "/esp32-offline-chat", label: "ESP32 Offline Chat" },
   { href: "https://github.com/PabloPablo666", label: "GitHub", external: true },
+  { href: "/games", label: "Games" },
   { href: "/about", label: "About" }
-
 ];
 ---
 
@@ -28,7 +29,19 @@ const links = [
 </nav>
 
 <style>
-.nav{ margin-top: 10px; }
-.nav a{ margin-right: 14px; }
-.nav a.current{ text-decoration: underline; }
+.nav {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;     /* può andare a capo */
+  gap: 12px 18px;      /* riga / colonna */
+  max-width: 100%;
+}
+
+.nav a {
+  white-space: nowrap;
+}
+
+.nav a.current {
+  text-decoration: underline;
+}
 </style>

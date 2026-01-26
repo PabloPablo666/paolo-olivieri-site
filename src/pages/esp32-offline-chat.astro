@@ -1,0 +1,133 @@
+---
+import Base from "../layouts/Base.astro";
+
+const demoUrl = "/demos/camperisti-anonimi.html";
+const codeUrl = "/downloads/esp32-offline-chat.zip";
+---
+
+<Base
+  title="ESP32 Offline Chat · Local Wi-Fi System"
+  description="Offline local chat hosted on an ESP32 SoftAP with a self-contained web UI and a RAM-backed message log."
+>
+  <h1>ESP32 Offline Chat</h1>
+
+  <p class="muted">
+    A <strong>fully offline local chat system</strong> running on an ESP32.
+    The device creates its own Wi-Fi network (SoftAP) and serves a web interface
+    to connected clients, with message exchange handled via simple HTTP endpoints.
+  </p>
+
+  <div class="card">
+    <p>
+      The goal was a minimal, infrastructure-free communication tool:
+      connect to the ESP32 network, open the page, and chat.
+    </p>
+
+    <p class="muted">
+      No cloud. No accounts. No persistence.
+      Messages live in volatile memory and disappear on reboot.
+    </p>
+
+    <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+      <a class="btn" href={demoUrl} target="_blank" rel="noopener noreferrer">
+        Open static UI demo
+      </a>
+
+      <a class="btn" href={codeUrl} download>
+        Download Arduino sketch
+      </a>
+    </div>
+
+    <p class="muted" style="margin-top:10px">
+      Note: the demo is <strong>UI-only</strong> and stores messages in <code>localStorage</code>,
+      so it does not replicate the ESP32 multi-client behaviour.
+    </p>
+  </div>
+
+  <h2>What it is</h2>
+  <div class="card">
+    <p>
+      The ESP32 runs in Wi-Fi SoftAP mode and exposes an HTTP server on port 80.
+      Clients connect directly to the device and submit messages via <code>POST</code>,
+      while the chat log is retrieved via <code>GET</code>.
+    </p>
+
+    <p class="muted">
+      The original system is LAN-only and intentionally simple: one shared log,
+      no authentication, no encryption layer.
+    </p>
+  </div>
+
+  <h2>HTTP endpoints</h2>
+  <div class="card">
+    <ul>
+      <li><code>GET /</code> – serves the chat interface</li>
+      <li><code>POST /send</code> – accepts <code>user</code> and <code>msg</code>, appends to the log</li>
+      <li><code>GET /chatlog</code> – returns the full log as <code>text/plain</code></li>
+    </ul>
+
+    <p class="muted">
+      Clients refresh the view via polling (once per second), not WebSockets.
+    </p>
+  </div>
+
+  <h2>Message storage</h2>
+  <div class="card">
+    <ul>
+      <li>Chat log stored in ESP32 RAM (volatile)</li>
+      <li>Trimmed to a fixed size (~3000 characters) to bound memory use</li>
+      <li>Client-side timestamps appended before submission</li>
+    </ul>
+
+    <p class="muted">
+      This is a deliberate tradeoff: fast and self-contained, but not durable.
+    </p>
+  </div>
+
+  <h2>Client interface</h2>
+  <div class="card">
+    <ul>
+      <li>Single-page HTML served by the ESP32</li>
+      <li>Matrix-style canvas background</li>
+      <li>Per-user colour hashing (stable hue from username)</li>
+      <li>Nickname persistence via <code>localStorage</code></li>
+      <li>Easter egg triggers (e.g. <code>NEO</code> → scripted MORPHEUS messages)</li>
+    </ul>
+  </div>
+
+  <h2>Static demo limitations</h2>
+  <div class="card">
+    <p>
+      The static demo is included to showcase the interface and interaction model,
+      but it is not networked:
+    </p>
+
+    <ul>
+      <li>Messages are stored locally in the browser (<code>localStorage</code>)</li>
+      <li>There is no shared server log, so multiple devices will not see the same chat</li>
+      <li>The ESP32 build uses a shared RAM log served via <code>/chatlog</code></li>
+    </ul>
+
+    <p class="muted">
+      In other words: the demo shows the UI, the ESP32 version is the actual multi-client system.
+    </p>
+  </div>
+
+  <h2>Hardware behaviour</h2>
+  <div class="card">
+    <ul>
+      <li>Status LED on GPIO4</li>
+      <li>Two-blink boot sequence as a simple alive indicator</li>
+    </ul>
+  </div>
+
+  <h2>What it is not</h2>
+  <div class="card">
+    <ul>
+      <li>❌ Real-time push messaging (no WebSockets)</li>
+      <li>❌ Persistent chat platform</li>
+      <li>❌ Encrypted communication layer</li>
+      <li>❌ Internet-connected service</li>
+    </ul>
+  </div>
+</Base>

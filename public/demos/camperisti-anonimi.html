@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>// ANONYMOUS CAMPERS //</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: monospace;
+      background: #000;
+      color: #0f0;
+      padding: 20px;
+      overflow: hidden;
+    }
+    canvas {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+    }
+    h3 {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #00ff00;
+      text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00;
+      letter-spacing: 2px;
+      border-bottom: 1px solid #0f0;
+      padding-bottom: 5px;
+      margin: 20px 0 10px 0;
+      font-family: "Courier New", Courier, monospace;
+    }
+    form { margin-top: 10px; }
+    .row { display: flex; gap: 4%; }
+    input[type="text"] {
+      width: 48%;
+      padding: 10px;
+      background: rgba(0,0,0,0.65);
+      color: #0f0;
+      border: 1px solid #0f0;
+      margin-bottom: 8px;
+      box-sizing: border-box;
+      outline: none;
+    }
+    input[type="submit"], button {
+      width: 100%;
+      padding: 10px;
+      background: #0f0;
+      color: #000;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button {
+      margin-top: 8px;
+      background: rgba(0,0,0,0.65);
+      color: #0f0;
+      border: 1px solid #0f0;
+    }
+    .hint {
+      opacity: 0.85;
+      font-size: 12px;
+      margin-top: 8px;
+      user-select: none;
+    }
+
+    #chatbox {
+      width: 100%;
+      height: 240px;
+      background: rgba(0,0,0,0.75);
+      border: 1px solid #0f0;
+      padding: 10px;
+      overflow-y: auto;
+      box-sizing: border-box;
+      white-space: pre-wrap;
+    }
+    .line { margin: 0 0 4px 0; }
+    .user { font-weight: bold; }
+    .msg { color: #0f0; }
+
+    #chatbox, input[type="text"] {
+      text-shadow: 0 0 2px rgba(0,255,0,0.35);
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="matrix"></canvas>
+
+  <h3>// ANONYMOUS CAMPERS //</h3>
+
+  <form id="f" autocomplete="off">
+    <div class="row">
+      <input type="text" id="user" name="user" placeholder="Username" required maxlength="24" />
+      <input type="text" id="msg"  name="msg"  placeholder="Type a message..." required maxlength="160" />
+    </div>
+    <input type="submit" value="Send" />
+  </form>
+
+  <button id="clear">Clear chat</button>
+  <div class="hint">
+    Easter egg: type <b>NEO</b> or <b>MATRIX</b>, <b>RED PILL</b>, <b>BLUE PILL</b>.
+  </div>
+
+  <h3>Messages:</h3>
+  <div id="chatbox"></div>
+
+<script>
+const KEY_LOG  = "campers_chatlog_v1";
+const KEY_USER = "campers_chatuser_v1";
+
+function getLog() { return localStorage.getItem(KEY_LOG) || ""; }
+function setLog(s) { localStorage.setItem(KEY_LOG, s.slice(-3000)); }
+function clearLog() { localStorage.removeItem(KEY_LOG); }
+
+function pad(n) { return n < 10 ? "0" + n : "" + n; }
+function nowStamp() {
+  const d = new Date();
+  return `[${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}]`;
+}
+
+function escapeHtml(s) {
+  return s
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#39;");
+}
+
+function stringToColor(str) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++)
+    hash = (hash * 31 + str.charCodeAt(i)) >>> 0;
+  const hue = hash % 360;
+  return `hsl(${hue}, 100%, 60%)`;
+}
+
+function appendLine(user, msg) {
+  const line = `${user}: ${msg}`;
+  let log = getLog();
+  log += line + "\n";
+  setLog(log);
+  renderLog();
+}
+
+function renderLog() {
+  const box = document.getElementById("chatbox");
+  const stick =
+    (box.scrollTop + box.clientHeight) >= (box.scrollHeight - 10);
+
+  const raw = getLog();
+  const lines = raw.split("\n").filter(l => l.trim().length);
+
+  box.innerHTML = lines.map(line => {
+    const m = line.match(/^(.*?):\s(.*)$/);
+    if (!m) return `<div class="line msg">${escapeHtml(line)}</div>`;
+    const user = m[1];
+    const msg  = m[2];
+    const c = stringToColor(user);
+    return `<div class="line"><span class="user" style="color:${c}">${escapeHtml(user)}</span>: <span class="msg">${escapeHtml(msg)}</span></div>`;
+  }).join("") || `<div class="line msg">(no messages)</div>`;
+
+  if (stick) box.scrollTop = box.scrollHeight;
+}
+
+/* Easter eggs */
+function systemSay(text, delayMs = 0, user = "MORPHEUS") {
+  setTimeout(() => appendLine(user, text), delayMs);
+}
+
+function handleEasterEgg(msgRaw) {
+  const u = msgRaw.trim().toUpperCase();
+
+  if (u === "NEO") {
+    const seq = [
+      "Wake up, Neo...",
+      "The Matrix has you...",
+      "Follow the white rabbit.",
+      "Knock, knock, Neo."
+    ];
+    seq.forEach((t, i) =>
+      systemSay(t, 1200 * (i + 1), "MORPHEUS")
+    );
+    return;
+  }
+
+  if (u === "MATRIX") {
+    systemSay("There is no spoon.", 700, "ORACLE");
+    return;
+  }
+
+  if (u === "RED PILL" || u === "REDPILL") {
+    systemSay(
+      "You stay in Wonderland, and I show you how deep the rabbit hole goes.",
+      700,
+      "MORPHEUS"
+    );
+    return;
+  }
+
+  if (u === "BLUE PILL" || u === "BLUEPILL") {
+    systemSay(
+      "You wake up in your bed and believe whatever you want to believe.",
+      700,
+      "MORPHEUS"
+    );
+    return;
+  }
+}
+
+/* Form */
+document.getElementById("f").addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const userEl = document.getElementById("user");
+  const msgEl  = document.getElementById("msg");
+
+  const user = userEl.value.trim();
+  const msg  = msgEl.value.trim();
+  if (!user || !msg) return;
+
+  localStorage.setItem(KEY_USER, user);
+
+  const fullMsg = `${msg} ${nowStamp()}`;
+  appendLine(user, fullMsg);
+  handleEasterEgg(msg);
+
+  msgEl.value = "";
+  msgEl.focus();
+});
+
+/* Clear */
+document.getElementById("clear").addEventListener("click", () => {
+  clearLog();
+  renderLog();
+});
+
+/* Init */
+window.addEventListener("load", () => {
+  const savedUser = localStorage.getItem(KEY_USER);
+  if (savedUser) document.getElementById("user").value = savedUser;
+  renderLog();
+});
+
+/* Matrix rain */
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
+const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%";
+let fontSize = 14;
+let columns = 0;
+let drops = [];
+
+function setupMatrix() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  columns = Math.floor(canvas.width / fontSize);
+  drops = Array(columns).fill(1);
+}
+
+function drawMatrix() {
+  ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = "#0f0";
+  ctx.font = fontSize + "px monospace";
+
+  for (let i = 0; i < drops.length; i++) {
+    const text = letters.charAt(
+      Math.floor(Math.random() * letters.length)
+    );
+    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975)
+      drops[i] = 0;
+    drops[i]++;
+  }
+}
+
+setupMatrix();
+setInterval(drawMatrix, 33);
+window.addEventListener("resize", setupMatrix);
+</script>
+</body>
+</html>

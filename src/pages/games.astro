@@ -1,0 +1,110 @@
+---
+import Base from "../layouts/Base.astro";
+
+const tentCityItch =
+  "https://pablopablopablo.itch.io/tent-city"; //
+
+const textAdventureUrl = "/demos/csharp-text-adventure.html";
+const csharpSourceUrl = "/downloads/csharp-text-adventure.zip";
+---
+
+<Base
+  title="Games · Paolo Olivieri"
+  description="University-era game projects and interactive experiments, with a focus on systems, structure and implementation."
+>
+  <h1>Games</h1>
+
+  <p class="muted">
+    A small selection of academic projects and interactive experiments developed during university.
+    These works are presented as technical and creative exercises rather than commercial products.
+  </p>
+
+  <!-- -------------------------------------------------- -->
+  <!-- Tent City -->
+  <!-- -------------------------------------------------- -->
+
+  <h2>Tent City</h2>
+  <div class="card">
+    <p>
+      <strong>Tent City</strong> was a university project originally conceived as an
+      environmental audio experiment.
+    </p>
+
+    <p>
+      The initial goal was to populate a virtual environment with
+      spatialised ambient sound sources, focusing on atmosphere,
+      perception and environmental storytelling rather than gameplay.
+    </p>
+
+    <p>
+      As development progressed, the project naturally expanded.
+      Driven by experimentation and technical curiosity, interactive
+      mechanics were introduced, eventually transforming the prototype
+      into a first-person experience with a loosely structured narrative layer.
+    </p>
+
+    <p class="muted">
+      The final build reflects this exploratory process: part sound-driven environment,
+      part experimental FPS, with an intentionally rough structure typical of academic
+      prototyping.
+    </p>
+
+    <p class="muted">
+      The project includes known limitations and unresolved behaviours,
+      which are preserved here as part of its development history.
+    </p>
+
+    <div style="margin-top:14px">
+      <a
+        class="btn"
+        href={tentCityItch}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Play on itch.io
+      </a>
+    </div>
+  </div>
+
+  <!-- -------------------------------------------------- -->
+  <!-- Text adventure -->
+  <!-- -------------------------------------------------- -->
+
+  <h2>C# Text Adventure</h2>
+  <div class="card">
+    <p>
+      A text-based adventure developed in C# as part of coursework,
+      focused on state management, branching logic and command parsing.
+    </p>
+
+    <p>
+      The original project was written entirely in C#, with a simple
+      engine handling player input, world state and narrative progression.
+    </p>
+
+    <p class="muted">
+      For this website, the game is presented as a lightweight browser
+      adaptation that reproduces the interaction model and structure of
+      the original implementation.
+    </p>
+
+    <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+      <a
+        class="btn"
+        href={textAdventureUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Open playable demo
+      </a>
+
+      <a
+        class="btn"
+        href={csharpSourceUrl}
+        download
+      >
+        Download original C# source
+      </a>
+    </div>
+  </div>
+</Base>
